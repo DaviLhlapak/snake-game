@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            outline: 0;
+            box-sizing: border-box;
+        }
+        body, html{
+            width: 100vw;
+            height: 100vh;
+        }
+        body{
+            background-color: #285059;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        canvas{
+            background-color: #30BF97;
+            border: 1px #000 solid;
+            width: 800px;
+            height: 800px;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            image-rendering: -moz-crisp-edges;
+        }
+    </style>
+</head>
+<body>
+    <canvas width="400" height="400"></canvas>
+    <script>
+        const screen = document.querySelector("canvas");
+        const context = screen.getContext('2d');
+        const positions = [0,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300,320,340,360,380];
+
+        function Player(x, y, size){
+            this.x = x;
+            this.y = y;
+            this.dx = 0;
+            this.dy = 0;
+            this.size = size;
+            this.color = "#F2AE30";
+            this.tamanhoCalda = 0;
+            this.calda = [];
+
+            this.draw = function (){
+                context.fillStyle = this.color;
+                context.fillRect(this.x,this.y,this.size,this.size);
+                for(var partCalda in this.calda){
+                    context.fillStyle = this.calda[partCalda].color;
+                    context.fillRect(this.calda[partCalda].x,this.calda[partCalda].y,this.size,this.size);
+                }
+            }
+
+            this.update = function(){
+                //color: (tamanhoCalda % 2 == 0)?"#BF6D24": "#D97B29"
+
+                if(this.calda.length == this.tamanhoCalda){
+                    this.calda.shift();
+                }
+                if(this.calda.length < this.tamanhoCalda){
+                    this.calda.push({x: this.x, y: this.y});
+                }
+                
+
+                this.y += this.dy;
+                this.x += this.dx;
+
+
+                if(this.x + size > screen.width){
+                    this.x = 0;
+                }
+                if(this.x - size < -size){
+                    this.x = screen.width - size;
+                }
+                if(this.y + size > screen.height){
+                    this.y = 0;
+                }
+                if(this.y - size < -size){
+                    this.y = screen.height - size;
+                }
+
+                
+                this.draw();
+            }
+        }
+        
+        function createGame(){
+
+            const player = new Player(Math.floor(screen.width/2),screen.height/2,20);
+            const frutas = [];
+
+            function verifyPnt(command){
+                const fruitPosition = {x: command.frutas.x, y: command.frutas.y};
+                const playerPosition = {x: command.player.x, y: command.player.y};
+                if(fruitPosition.x == playerPosition.x && fruitPosition.y == playerPosition.y){
+                    frutas.pop();
+                    player.tamanhoCalda++;
+                }
+            }
+
+            function movePlayer(command){
+                
+                const acceptedMoves = {
+                    ArrowUp(player){
+                        player.dx = 0;
+                        player.dy = -player.size;
+                    },
+                    ArrowDown(player){
+                        player.dx = 0;
+                        player.dy = player.size;
+                    },
+                    ArrowLeft(player){
+                        player.dy = 0;
+                        player.dx = -player.size;
+                    },
+                    ArrowRight(player){
+                        player.dy = 0;
+                        player.dx = player.size;
+                    }
+                }
+
+                const keyPressed = command.keyPressed;
+                const moveFunction = acceptedMoves[keyPressed];
+               
+                if(moveFunction){
+                    moveFunction(player);
+                }
+                
+          
+            }
+
+            function createFruta(){
+                if(frutas.length == 0){
+                    frutas.push({
+                        x: positions[Math.floor(Math.random() * positions.length)],
+                        y: positions[Math.floor(Math.random() * positions.length)]
+                    })
+                }
+                context.fillStyle = "#D93636";
+                context.fillRect(game.frutas[0].x,game.frutas[0].y,20,20);
+            }
+
+            return {
+                movePlayer,
+                verifyPnt,
+                player,
+                frutas,
+                createFruta
+            }
+        }
+
+        const game = createGame();
+        const keyboardListener = createKeyboardListener();
+        const fruitListener = createFruitListener();
+        keyboardListener.subscribe(game.movePlayer);
+        fruitListener.subscribe(game.verifyPnt);
+
+        function createKeyboardListener(){
+            const state = {
+                observers: []
+            }
+
+            function subscribe(observerFunction){
+                state.observers.push(observerFunction);
+            }
+
+            function notifyAll(command){
+                for(const observerFunction of state.observers){
+                    observerFunction(command)
+                }
+            }
+
+            document.addEventListener("keydown",handleKeyDown);
+
+            function handleKeyDown(event){
+                const keyPress = event.key;
+
+                const command = {
+                    keyPressed: keyPress
+                }
+
+                notifyAll(command)
+            }
+
+            return{
+                subscribe
+            }
+        }
+
+        function createFruitListener(){
+            const state = {
+                observers: []
+            }
+
+            function subscribe(observerFunction){
+                state.observers.push(observerFunction);
+            }
+
+            function notifyAll(command){
+                for(const observerFunction of state.observers){
+                    observerFunction(command)
+                }
+            }
+
+            function verifyFruit(event){
+                notifyAll(event)
+            }
+
+            return{
+                subscribe,
+                verifyFruit
+            }
+        }
+
+        setInterval(renderScreen, 100);
+
+        renderScreen()
+
+        function renderScreen(){
+            context.clearRect(0,0,screen.width,screen.height)
+
+            game.createFruta();
+            game.player.update();
+
+            fruitListener.verifyFruit({frutas: game.frutas[0], player: game.player});
+        }
+    </script>
+</body>
+</html>
