@@ -69,6 +69,10 @@
 
             document.querySelector("p.pnts").innerText = `Pontos ${game.state.pnts}`;
             fruitListener.verifyFruit({frutas: game.state.frutas[0], player: game.state.player});
+
+            if(game.state.jogando && game.state.player.dx == 0 && game.state.player.dy == 0){
+                game.resetGame();
+            }
         }
 
     </script>
