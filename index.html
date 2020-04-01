@@ -63,6 +63,7 @@
 
         function renderScreen(){
             context.clearRect(0,0,screen.width,screen.height)
+            game.state.frutaImg.src = "./src/maca.png";
 
             game.createFruta();
             game.state.player.update();
