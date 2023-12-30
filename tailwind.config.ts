@@ -14,8 +14,11 @@ const config: Config = {
             white: '#FFFFFF',
             black: '#000000',
             green: {
-                500: '#30bf97',
-                700: '#285059'
+                500: '#6AA69B',
+                700: '#1D594E'
+            },
+            orange: {
+                500: '#F0CB46'
             }
         },
         container: {

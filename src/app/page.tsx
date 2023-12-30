@@ -1,85 +1,46 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
-import { createGame } from '@/lib/game'
-import { createKeyboardListener } from '@/lib/keyboard-listener'
-import { createFruitListener } from '@/lib/fruit-listener'
+import { useGameState } from '@/lib/core/state'
 
 export default function Page() {
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
-    const [gameState, setGameState] = useState<null | ReturnType<
-        typeof createGame
-    >>(null)
-
-    const keyboardListenerRef = useRef<null | ReturnType<
-        typeof createKeyboardListener
-    >>(null)
-
-    const fruitListenerRef = useRef<null | ReturnType<
-        typeof createFruitListener
-    >>(null)
+    const { canvas, setCanvas, started, startGame, state } = useGameState()
 
     useEffect(() => {
-        if (canvasRef.current && gameState === null) {
-            const screen = document.querySelector('canvas')
-            if (screen) {
-                const context = screen.getContext('2d')
-                if (context) {
-                    const game = createGame(screen, context)
-
-                    const keyboardListener = createKeyboardListener(document)
-                    keyboardListener.subscribe(game.movePlayer)
-                    keyboardListenerRef.current = keyboardListener
-
-                    const fruitListener = createFruitListener()
-                    fruitListener.subscribe(game.verifyPnt)
-                    fruitListenerRef.current = fruitListener
-
-                    setGameState(game)
-
-                    const renderScreen = () => {
-                        context.clearRect(0, 0, screen.width, screen.height)
-                        game.state.frutaImg.src = '/maca.png'
-
-                        game.createFruta()
-                        game.state.player.update()
-
-                        if (fruitListenerRef.current) {
-                            fruitListenerRef.current.verifyFruit({
-                                frutas: game.state.frutas[0],
-                                player: game.state.player
-                            })
-                        }
-
-                        if (
-                            game.state.jogando &&
-                            game.state.player.dx == 0 &&
-                            game.state.player.dy == 0
-                        ) {
-                            game.resetGame()
-                        }
-                    }
-
-                    setInterval(renderScreen, 100)
-
-                    renderScreen()
-                }
-            }
+        if (!canvas && canvasRef.current) {
+            setCanvas(canvasRef.current, { width: 500, height: 500 })
         }
-    }, [gameState])
+    }, [canvas, setCanvas])
 
     return (
-        <div className="container flex flex-col items-center justify-center gap-5 py-20">
-            <p className="text-xl font-semibold">Pontos 0</p>
+        <div className="container flex h-screen flex-col items-center justify-center gap-5 py-20">
+            <p
+                data-started={started}
+                className="select-none text-2xl font-semibold opacity-0 data-[started=true]:opacity-100"
+            >
+                Pontos {state?.points ?? 0}
+            </p>
             <canvas
                 ref={canvasRef}
-                width="400"
-                height="400"
                 style={{ imageRendering: 'pixelated' }}
-                className="bg-green-500 h-[600px] w-[600px] border border-black"
+                className="h-[600px] w-[600px] rounded-md bg-green-500 shadow-inner"
             />
+            {!started && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                    <button
+                        className="select-none rounded-3xl bg-orange-500 px-4 py-2 text-3xl font-bold text-white transition-all duration-300 hover:scale-110"
+                        type="button"
+                        onClick={() => {
+                            startGame()
+                        }}
+                    >
+                        Iniciar
+                    </button>
+                </div>
+            )}
         </div>
     )
 }
