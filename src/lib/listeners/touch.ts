@@ -35,7 +35,9 @@ export default class TouchListener {
     }
 
     private handleTouchEnd(event: TouchEvent) {
-        const currentPosition = this.getCurrentTouchPosition(event.touches)
+        const currentPosition = this.getCurrentTouchPosition(
+            event.changedTouches
+        )
         if (currentPosition === null || this.touchStartPosition === null) return
 
         const horizontalDifference =
