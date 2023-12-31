@@ -13,6 +13,18 @@ export function getPlayerActions(player: Player): Record<string, Function> {
         },
         ArrowRight() {
             player.setDirection(1, 0)
+        },
+        SwipeUp() {
+            player.setDirection(0, -1)
+        },
+        SwipeDown() {
+            player.setDirection(0, 1)
+        },
+        SwipeLeft() {
+            player.setDirection(-1, 0)
+        },
+        SwipeRight() {
+            player.setDirection(1, 0)
         }
     }
 }

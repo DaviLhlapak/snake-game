@@ -32,4 +32,8 @@ export default class KeyboardListener {
     subscribe(observerFunction: KeyboardObserver) {
         this.observers.push(observerFunction)
     }
+
+    clear() {
+        this.observers = []
+    }
 }

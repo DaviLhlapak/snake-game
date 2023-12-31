@@ -26,7 +26,8 @@ export default class Player implements DynamicObject {
     constructor(
         x: number,
         y: number,
-        private screen: { width: number; height: number }
+        private screen: { width: number; height: number },
+        private onDestroy: () => void
     ) {
         this.x = x
         this.y = y
@@ -35,9 +36,6 @@ export default class Player implements DynamicObject {
     }
 
     public draw(drawer: CanvasRenderingContext2D) {
-        drawer.fillStyle = '#F2CB05'
-        drawer.fillRect(this.x, this.y, this.size, this.size)
-
         this.tails.forEach(tail => {
             drawer.fillStyle = '#F29F05'
             drawer.fillRect(
@@ -47,6 +45,9 @@ export default class Player implements DynamicObject {
                 this.size
             )
         })
+
+        drawer.fillStyle = '#F2CB05'
+        drawer.fillRect(this.x, this.y, this.size, this.size)
     }
 
     private startTimer = (objects: Array<GameObjects>) => {
@@ -95,6 +96,12 @@ export default class Player implements DynamicObject {
                 this._uuid !== object.uuid
             ) {
                 object.onEvent('colision', this)
+            }
+        })
+
+        this.tails.forEach(tail => {
+            if (this.x === tail.position.x && this.y === tail.position.y) {
+                this.onDestroy()
             }
         })
     }

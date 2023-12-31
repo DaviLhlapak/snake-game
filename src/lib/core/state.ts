@@ -1,5 +1,5 @@
 import Game from '@/lib/core/game'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 const useGameState = () => {
     let canvas: HTMLCanvasElement | null = null
@@ -35,29 +35,38 @@ const useGameState = () => {
         )
     }
 
-    useEffect(() => {
+    const restartGame = () => {
+        if (!started || !game) return
+        game.restart()
+    }
+
+    const loop = useCallback(() => {
         if (!started || !game) return
 
-        const loop = () => {
-            game.loop()
-            const handler = requestAnimationFrame(loop)
-            setRequestAnimationFrameHandler(handler)
-        }
+        game.loop()
+        const handler = requestAnimationFrame(loop)
+        setRequestAnimationFrameHandler(handler)
+    }, [game, started])
 
-        loop()
+    useEffect(() => {
+        if (requestAnimationFrameHandler === null) {
+            loop()
+        }
 
         return () => {
             if (requestAnimationFrameHandler)
                 cancelAnimationFrame(requestAnimationFrameHandler)
         }
-    }, [game, requestAnimationFrameHandler, started])
+    }, [loop, requestAnimationFrameHandler])
 
     return {
         canvas,
         setCanvas,
         started,
         startGame,
-        state: game?.state
+        restartGame,
+        state: game?.state,
+        highScore: game?.highScore ?? null
     }
 }
 
