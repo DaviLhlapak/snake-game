@@ -23,8 +23,8 @@ export default function RootLayout({
 }) {
     return (
         <html lang="pt-br" className={`scroll-smooth ${inter.variable}`}>
-            <body className="font-inter bg-green-700 flex h-full min-h-screen w-full items-stretch justify-stretch text-white">
-                <main className="relative flex h-full min-h-screen w-full flex-grow flex-col items-center">
+            <body className="font-inter flex h-full min-h-dvh w-full items-stretch justify-stretch bg-green-700 text-white">
+                <main className="relative flex h-full min-h-dvh w-full flex-grow flex-col items-center">
                     {children}
                 </main>
             </body>

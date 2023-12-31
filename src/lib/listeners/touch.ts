@@ -23,8 +23,8 @@ export default class TouchListener {
         if (!firstTouch) return null
 
         return {
-            x: firstTouch.clientX,
-            y: firstTouch.clientY
+            x: firstTouch.screenX,
+            y: firstTouch.screenY
         }
     }
 

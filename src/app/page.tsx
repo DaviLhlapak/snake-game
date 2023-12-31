@@ -24,7 +24,7 @@ export default function Page() {
     }, [canvas, setCanvas])
 
     return (
-        <div className="container flex h-screen flex-col items-center justify-center gap-5 py-20">
+        <div className="container flex h-dvh flex-col items-center justify-center gap-5 py-20">
             <div className="flex flex-col items-center justify-center gap-y-1">
                 <p
                     data-started={started}
