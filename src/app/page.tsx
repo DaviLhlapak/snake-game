@@ -42,7 +42,7 @@ export default function Page() {
             <canvas
                 ref={canvasRef}
                 style={{ imageRendering: 'pixelated' }}
-                className="h-[28rem] w-80 rounded-md bg-green-500 shadow-inner min-[390px]:h-[31rem] min-[390px]:w-96 md:h-[720px] md:w-[600px]"
+                className="h-[28rem] w-80 rounded-md bg-green-500 shadow-inner min-[390px]:h-[31rem] min-[390px]:w-96 md:h-[740px] md:w-[600px]"
             />
             {!started && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20">

@@ -19,8 +19,11 @@ export default class Fruit implements StaticObject {
     }
 
     public draw(drawer: CanvasRenderingContext2D) {
+        const appleImage = new Image(20, 20)
+        appleImage.src = '/apple.png'
+
         drawer.fillStyle = '#F23030'
-        drawer.fillRect(this.x, this.y, this.size, this.size)
+        drawer.drawImage(appleImage, this.x, this.y, this.size, this.size)
     }
 
     public onEvent(type: EventType, target: GameObject) {
