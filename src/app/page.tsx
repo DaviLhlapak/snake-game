@@ -19,7 +19,7 @@ export default function Page() {
 
     useEffect(() => {
         if (!canvas && canvasRef.current) {
-            setCanvas(canvasRef.current, { width: 500, height: 500 })
+            setCanvas(canvasRef.current, { width: 320, height: 480 })
         }
     }, [canvas, setCanvas])
 
@@ -42,7 +42,7 @@ export default function Page() {
             <canvas
                 ref={canvasRef}
                 style={{ imageRendering: 'pixelated' }}
-                className="h-80 w-80 rounded-md bg-green-500 shadow-inner min-[390px]:h-96 min-[390px]:w-96 md:h-[600px] md:w-[600px]"
+                className="h-[28rem] w-80 rounded-md bg-green-500 shadow-inner min-[390px]:h-[31rem] min-[390px]:w-96 md:h-[720px] md:w-[600px]"
             />
             {!started && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20">
