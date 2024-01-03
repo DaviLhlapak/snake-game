@@ -1,3 +1,4 @@
+import { HEAD_IMAGE_BY_DIRECTION } from '../constants/player'
 import {
     DynamicObject,
     EventType,
@@ -46,8 +47,40 @@ export default class Player implements DynamicObject {
             )
         })
 
+        this.drawHead(drawer)
+    }
+
+    private drawHead(drawer: CanvasRenderingContext2D) {
+        const headImage = new Image(80, 20)
+        headImage.src = '/head.png'
+
+        let direction: keyof typeof HEAD_IMAGE_BY_DIRECTION | null = null
+
+        if (this.directionX === 1) {
+            direction = 'Right'
+        }
+        if (this.directionX === -1) {
+            direction = 'Left'
+        }
+        if (this.directionY === 1) {
+            direction = 'Down'
+        }
+        if (this.directionY === -1) {
+            direction = 'Up'
+        }
+
         drawer.fillStyle = '#F2CB05'
-        drawer.fillRect(this.x, this.y, this.size, this.size)
+        drawer.drawImage(
+            headImage,
+            direction ? HEAD_IMAGE_BY_DIRECTION[direction].x : 0,
+            direction ? HEAD_IMAGE_BY_DIRECTION[direction].y : 0,
+            20,
+            20,
+            this.x,
+            this.y,
+            this.size,
+            this.size
+        )
     }
 
     private startTimer = (objects: Array<GameObjects>) => {
