@@ -38,15 +38,8 @@ export default class Player implements DynamicObject {
 
     public draw(drawer: CanvasRenderingContext2D) {
         this.tails.forEach(tail => {
-            drawer.fillStyle = '#F29F05'
-            drawer.fillRect(
-                tail.position.x,
-                tail.position.y,
-                this.size,
-                this.size
-            )
+            tail.draw(drawer)
         })
-
         this.drawHead(drawer)
     }
 
@@ -107,6 +100,7 @@ export default class Player implements DynamicObject {
                     this.generateTail(this.lastX, this.lastY)
                 }
 
+                this.setLastTail()
                 this.verifyWalls()
                 this.verifyColision(objects)
                 this.stopTimer()
@@ -157,12 +151,30 @@ export default class Player implements DynamicObject {
         }
     }
 
-    removeLastTail() {
+    private removeLastTail() {
         this.tails.shift()
     }
 
-    generateTail(x: number, y: number) {
-        this.tails.push(new Tail(x, y))
+    private generateTail(x: number, y: number) {
+        this.tails.push(
+            new Tail(
+                x,
+                y,
+                { x: this.directionX ?? 0, y: this.directionY ?? 0 },
+                this.tails.length > 0
+                    ? {
+                          x: this.tails.at(-1)?.targetDirection.x ?? 0,
+                          y: this.tails.at(-1)?.targetDirection.y ?? 0
+                      }
+                    : undefined
+            )
+        )
+    }
+
+    private setLastTail() {
+        const lastTail = this.tails.at(0)
+        if (lastTail === undefined) return
+        lastTail.removeOrigin()
     }
 
     private move = (x: number, y: number) => {
