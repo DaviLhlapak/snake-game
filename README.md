@@ -1,5 +1,26 @@
-# snake-game
+![Snake Game](public/thumb.png)
 
-Joguinho da cobrinha criado utilizando somente Js e Canvas, para meu aprendizado e estudos.
+## ⭐️ About
 
-Tudo feito a partir dos conhecimentos de canvas que aprendi com o canal do Chris Courses (https://www.youtube.com/channel/UC9Yp2yz6-pwhQuPlIDV_mjA), e baseado na playlist de Jogo Multiplayer do Filipe Deschamps (https://www.youtube.com/playlist?list=PLMdYygf53DP5SVQQrkKCVWDS0TwYLVitL).
+SnakeGame is an implementation made with JavaScript, TypeScript, and React of a famous classic game called Snake.
+
+## 🕹️ Play Online
+
+[Snake Game Online](https://snake.davilhlapak.com.br/)
+
+## 🚀 Getting Started
+
+Clone this repository and install the dependencies using your preferred package manager.
+
+```bash
+pnpm install
+# or
+yarn
+# or
+npm install
+```
+
+## 🧩 How to play
+
+-   The objective is to eat all the fruits on the screen using the snake's head.
+-   To control your snake, you can press any of the arrow keys ⬅️⬆️➡️⬇️ on your keyboard or swipe the screen 👇 in the mobile version.
