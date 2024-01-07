@@ -24,7 +24,7 @@ export default function RootLayout({
     return (
         <html
             lang="pt-br"
-            className={`scroll-smooth ${inter.variable} overscroll-none`}
+            className={`scroll-smooth ${inter.variable} overscroll-y-contain`}
         >
             <body className="font-inter flex h-full min-h-dvh w-full items-stretch justify-stretch bg-green-700 text-white">
                 <main className="relative flex h-full min-h-dvh w-full flex-grow flex-col items-center">
