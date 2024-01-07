@@ -11,9 +11,11 @@ export default class TouchListener {
 
     constructor() {
         document.addEventListener('touchstart', event => {
+            event.preventDefault()
             this.handleTouchStart(event)
         })
         document.addEventListener('touchend', event => {
+            event.preventDefault()
             this.handleTouchEnd(event)
         })
     }
