@@ -10,6 +10,8 @@ export default class Tail implements StaticObject {
     private _zIndex: number
     private x: number
     private y: number
+    private tailSprite: HTMLImageElement
+    private middleTailSprite: HTMLImageElement
 
     constructor(
         x: number,
@@ -21,6 +23,15 @@ export default class Tail implements StaticObject {
         this.y = y
         this._uuid = crypto.randomUUID()
         this._zIndex = 0
+
+        const tailImage = new Image(80, 20)
+        tailImage.src = '/tail.png'
+
+        const middleTailImage = new Image(120, 20)
+        middleTailImage.src = '/middle.png'
+
+        this.tailSprite = tailImage
+        this.middleTailSprite = middleTailImage
     }
 
     public draw(drawer: CanvasRenderingContext2D) {
@@ -32,9 +43,6 @@ export default class Tail implements StaticObject {
     }
 
     private drawLastTail(drawer: CanvasRenderingContext2D) {
-        const tailImage = new Image(80, 20)
-        tailImage.src = '/tail.png'
-
         let direction: keyof typeof TAIL_IMAGE_BY_DIRECTION | null = null
 
         if (this.target.x === 1) {
@@ -52,7 +60,7 @@ export default class Tail implements StaticObject {
 
         drawer.fillStyle = '#F29F05'
         drawer.drawImage(
-            tailImage,
+            this.tailSprite,
             direction ? TAIL_IMAGE_BY_DIRECTION[direction].x : 0,
             direction ? TAIL_IMAGE_BY_DIRECTION[direction].y : 0,
             20,
@@ -66,9 +74,6 @@ export default class Tail implements StaticObject {
 
     private drawMiddleTail(drawer: CanvasRenderingContext2D) {
         if (this.origin === undefined) return
-
-        const tailImage = new Image(120, 20)
-        tailImage.src = '/middle.png'
 
         let direction: keyof typeof MIDDLE_TAIL_IMAGE_BY_DIRECTION | null = null
 
@@ -108,7 +113,7 @@ export default class Tail implements StaticObject {
             drawer.fillRect(this.x, this.y, this.size, this.size)
         } else {
             drawer.drawImage(
-                tailImage,
+                this.middleTailSprite,
                 direction ? MIDDLE_TAIL_IMAGE_BY_DIRECTION[direction].x : 0,
                 direction ? MIDDLE_TAIL_IMAGE_BY_DIRECTION[direction].y : 0,
                 20,

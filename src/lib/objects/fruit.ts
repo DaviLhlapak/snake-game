@@ -6,6 +6,7 @@ export default class Fruit implements StaticObject {
     private _zIndex: number
     private x: number
     private y: number
+    private sprite: HTMLImageElement
 
     constructor(
         x: number,
@@ -16,14 +17,15 @@ export default class Fruit implements StaticObject {
         this.y = y
         this._uuid = crypto.randomUUID()
         this._zIndex = 0
+
+        const appleImage = new Image(20, 20)
+        appleImage.src = '/apple.png'
+        this.sprite = appleImage
     }
 
     public draw(drawer: CanvasRenderingContext2D) {
-        const appleImage = new Image(20, 20)
-        appleImage.src = '/apple.png'
-
         drawer.fillStyle = '#F23030'
-        drawer.drawImage(appleImage, this.x, this.y, this.size, this.size)
+        drawer.drawImage(this.sprite, this.x, this.y, this.size, this.size)
     }
 
     public onEvent(type: EventType, target: GameObject) {

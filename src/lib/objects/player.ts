@@ -23,6 +23,7 @@ export default class Player implements DynamicObject {
     private lastY: number | undefined
     private lastDirectionX: number | undefined
     private lastDirectionY: number | undefined
+    private sprite: HTMLImageElement
 
     constructor(
         x: number,
@@ -34,6 +35,10 @@ export default class Player implements DynamicObject {
         this.y = y
         this._uuid = crypto.randomUUID()
         this._zIndex = 1
+
+        const headImage = new Image(80, 20)
+        headImage.src = '/head.png'
+        this.sprite = headImage
     }
 
     public draw(drawer: CanvasRenderingContext2D) {
@@ -44,9 +49,6 @@ export default class Player implements DynamicObject {
     }
 
     private drawHead(drawer: CanvasRenderingContext2D) {
-        const headImage = new Image(80, 20)
-        headImage.src = '/head.png'
-
         let direction: keyof typeof HEAD_IMAGE_BY_DIRECTION | null = null
 
         if (this.directionX === 1) {
@@ -64,7 +66,7 @@ export default class Player implements DynamicObject {
 
         drawer.fillStyle = '#F2CB05'
         drawer.drawImage(
-            headImage,
+            this.sprite,
             direction ? HEAD_IMAGE_BY_DIRECTION[direction].x : 0,
             direction ? HEAD_IMAGE_BY_DIRECTION[direction].y : 0,
             20,
